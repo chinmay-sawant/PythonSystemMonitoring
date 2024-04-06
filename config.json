@@ -6,5 +6,8 @@
         "pass": "redispass",
         "consumer_group": "psmgroup",
         "stream_key": "psmstream"
+    },
+    "schedule":{
+        "heartbeat": 2
     }
 }

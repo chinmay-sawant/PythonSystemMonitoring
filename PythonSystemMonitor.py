@@ -23,11 +23,11 @@ if __name__ == "__main__":
         RC = RedisConfig(config)
         # serverType can be server/client
         if config["serverType"]=="client":
-            schedule.every(2).seconds.do(RC.pubRedisData)
+            schedule.every(config["schedule"]["heartbeat"]).seconds.do(RC.pubRedisData)
             while True:
                 schedule.run_pending()
         elif config["serverType"]=="server":
-            schedule.every(2).seconds.do(RC.subRedisData)
+            schedule.every(config["schedule"]["heartbeat"]).seconds.do(RC.subRedisData)
             while True:
                 schedule.run_pending()
         else:

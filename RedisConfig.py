@@ -14,10 +14,6 @@ class RedisConfig:
         try:
             # Connect to Redis
             self.redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, password='redispass')
-
-            # Create a Redis stream
-            self.stream_key = 'psmstream'
-
             # Publish messages to the stream
             for _ in range(1, 11):
                 random_number = random.randint(10, 99) 
@@ -25,7 +21,6 @@ class RedisConfig:
                 self.redis_client.xadd(self.stream_key, message)
 
             # Create a consumer group
-            self.consumer_group = 'psmgroup'
             try:
                 self.create_consumer_group_if_not_exists()
             except redis.exceptions.ResponseError:
@@ -43,7 +38,7 @@ class RedisConfig:
         # redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, password='redispass')
         existing_groups = self.redis_client.xinfo_groups(self.stream_key)
         for group_info in existing_groups:
-            logger.info(f"group_info - {group_info}")
+            #logger.info(f"group_info - {group_info}")
             if group_info['name'] == self.consumer_group.encode():
                 logger.info(f"Consumer group '{self.consumer_group}' already exists.")
                 return
@@ -57,9 +52,6 @@ class RedisConfig:
     def subRedisData(self):
         try:
             # Read messages from the stream
-            #redis_client = redis.StrictRedis(host='localhost', port=6379, db=0, password='redispass')
-            self.consumer_group = 'psmgroup'
-            self.stream_key = 'psmstream'
             while True:
                 # Read messages from the stream with a timeout
                 messages = self.redis_client.xreadgroup(self.consumer_group, 'psmconsumer', {self.stream_key: '>'}, count=10, block=1000)

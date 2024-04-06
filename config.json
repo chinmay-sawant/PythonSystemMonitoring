@@ -1,0 +1,10 @@
+{
+    "serverType": "client",
+    "redis":{
+        "host": "localhost",
+        "port": "6379",
+        "pass": "redispass",
+        "consumer_group": "psmgroup",
+        "stream_key": "psmstream"
+    }
+}

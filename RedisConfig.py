@@ -5,8 +5,8 @@ class RedisConfig:
     def __init__(self,config) -> None:
         logger.info("Initiated Redis Config...")
         self.redis_client = redis.StrictRedis(host=config["redis"]["host"], port=config["redis"]["port"], db=0, password=config["redis"]["pass"])
-        self.consumer_group = config["redis"]["self.consumer_group"]
-        self.stream_key = config["redis"]["self.stream_key"]
+        self.consumer_group = config["redis"]["consumer_group"]
+        self.stream_key = config["redis"]["stream_key"]
     """
     Sending data to Redis (Publisher)
     """

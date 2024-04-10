@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventStream Subscriber</title>
+</head>
+<body>
+    <div id="streamData"></div>
+
+    <script>
+        const eventSource = new EventSource('http://localhost:8000/stream');
+
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            document.getElementById('streamData').innerText = JSON.stringify(data);
+        };
+
+        eventSource.onerror = function(error) {
+            console.error('EventSource error:', error);
+        };
+    </script>
+</body>
+</html>

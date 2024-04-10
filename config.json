@@ -1,4 +1,5 @@
 {
+    "serverName": "testing1",
     "serverType": "server",
     "redis":{
         "host": "localhost",
@@ -9,5 +10,9 @@
     },
     "schedule":{
         "heartbeat": 2
+    },
+    "mongoDB": {
+        "host": "localhost",
+        "port": 27017
     }
 }

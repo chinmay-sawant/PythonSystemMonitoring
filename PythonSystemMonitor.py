@@ -18,7 +18,7 @@ class PSM:
     
 if __name__ == "__main__":
     try:
-        PSM = PSM()
+        PSM = PSM()    
         config = PSM.load_config("config.json")
         RC = RedisConfig(config)
         # serverType can be server/client

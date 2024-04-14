@@ -1,6 +1,6 @@
 {
     "serverName": "testing1",
-    "serverType": "server",
+    "serverType": "client",
     "redis":{
         "host": "localhost",
         "port": "6379",

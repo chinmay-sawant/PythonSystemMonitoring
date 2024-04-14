@@ -5,9 +5,14 @@ class MongoConfig:
         self.client = MongoClient(config["mongoDB"]["host"], config["mongoDB"]["port"])
         self.db = self.client['psmDB']
         # Accessing a collection
+        self.todayDate = self.getTodaysDate()
         self.collection = self.db[f"{config['serverName']}_{self.getTodaysDate()}"]
-
+        self.config = config
+        
     def InsertOne(self,jsonData) -> bool:
+        if self.todayDate!=self.getTodaysDate():
+            self.collection = self.db[f"{self.config['serverName']}_{self.getTodaysDate()}"]
+
         result = self.collection.insert_one(jsonData)
         return True if result.inserted_id else False
     

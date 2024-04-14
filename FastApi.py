@@ -4,8 +4,27 @@ import asyncio
 from motor.motor_asyncio import AsyncIOMotorClient
 import json
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import datetime
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
+# Mount the static files directory
+#app.mount("/psm", StaticFiles(directory="./dist"), name="static")
+def load_config(config_file):
+    with open(config_file, 'r') as f:
+        config = json.load(f)
+    return config
+
+def getTodaysDate() -> str:   
+    # Get today's date
+    today_date = datetime.today()
+    # Format the date as yyyy-mm-dd
+    formatted_date = today_date.strftime('%Y-%m-%d')
+    return formatted_date
+
+jsonConfig =  load_config("config.json")
+
+
 # Connect to the MongoDB instance running on localhost at port 27017
 client = AsyncIOMotorClient('localhost', 27017)
 
@@ -16,7 +35,7 @@ client = AsyncIOMotorClient('localhost', 27017)
 db = client['psmDB']
 
 # Accessing a collection
-collection = db['psmCollection']
+collection = db[f"{jsonConfig['serverName']}_{getTodaysDate()}"]
 
 # Configure CORS
 app.add_middleware(
@@ -36,7 +55,7 @@ async def data_stream():
 
 async def getRecordFromMongoDb():
     # Assuming 'collection' is your MongoDB collection instance
-    result = await collection.find_one({}, sort=[("2024-04-07.timestamp", -1)])
+    result = await collection.find_one({}, sort=[(f"{getTodaysDate()}.timestamp", -1)])
     asyncio.timeout(1)
     return result
 

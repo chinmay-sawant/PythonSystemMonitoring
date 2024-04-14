@@ -4,7 +4,7 @@ from MongoConfig import MongoConfig
 from SystemMonitoring import SystemMonitoring
 import json
 from datetime import datetime
-
+import time
 
 class RedisConfig:
     def __init__(self,config) -> None:
@@ -76,14 +76,17 @@ class RedisConfig:
                         #logger.info(f"Received message {type(message_id.decode())}: {type(decoded_redis_output)}")
                         #MongoJsonObject = {self.config["serverName"]:decoded_redis_output}
                         subResults.append(decoded_redis_output)
-                        print(decoded_redis_output)
+                        #print(decoded_redis_output)
                         # Delete the message from the stream
                         self.redis_client.xdel(self.stream_key, message_id)
-
+                if subResults!=[]:
+                    [self.MC.InsertOne(x) for x in subResults]
+                    subResults=[]
         except KeyboardInterrupt:
             logger.warning("Program Interrupted !")
         
-        [self.MC.InsertOne(x) for x in subResults]
+       
+
     
     def getTodaysDate(self) -> str:   
         # Get today's date

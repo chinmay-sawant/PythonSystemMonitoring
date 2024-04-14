@@ -6,20 +6,23 @@ import time
 def randomFloat() -> float:
     return round(random.uniform(1, 100), 2)
 
+def getTodaysDate(self) -> str:   
+    # Get today's date
+    today_date = datetime.today()
+    # Format the date as yyyy-mm-dd
+    formatted_date = today_date.strftime('%Y-%m-%d')
+    return formatted_date
+
 def getTimeZoneData() -> str:
-        # Get the current date and time
-        current_time = datetime.now()
-
-        # Get the local timezone
-        local_timezone = get_localzone()
-
-
-      # Convert the current time to the local timezone
-        localized_time = current_time.astimezone(local_timezone)
-
-        # Convert the localized time to a string with timezone information
-        time_with_timezone_string = localized_time.strftime('%Y-%m-%d %H:%M:%S %Z')
-        return time_with_timezone_string
+    # Get the current date and time
+    current_time = datetime.now()
+    # Get the local timezone
+    local_timezone = get_localzone()
+    # Convert the current time to the local timezone
+    localized_time = current_time.astimezone(local_timezone)
+    # Convert the localized time to a string with timezone information
+    time_with_timezone_string = localized_time.strftime('%Y-%m-%d %H:%M:%S %Z')
+    return time_with_timezone_string
 
 def getDocument() -> str:
     document = {

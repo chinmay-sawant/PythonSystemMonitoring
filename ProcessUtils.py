@@ -1,29 +1,22 @@
 import psutil
-import time
+import json
 
-# Function to get CPU utilization for each process
-def get_process_utilization():
-    processes = []
-    for proc in psutil.process_iter(['pid', 'name', 'cpu_percent']):
+def get_process_list_json():
+    process_list = []
+    for process in psutil.process_iter():
         try:
-            process_info = proc.info
-            processes.append(process_info)
+            process_info = process.as_dict(attrs=['pid', 'name', 'username', 'memory_percent'])
+            process_info['cpu_percent'] = process.cpu_percent()
+            process_info['memory_percent'] = process.memory_percent()
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
-    return processes
-
-# Function to display process information
-def display_process_info(processes):
-    print("PID\tName\t\tCPU Utilization")
-    for proc in processes:
-        print(f"{proc['pid']}\t{proc['name']}\t\t{proc['cpu_percent']}%")
-
-# Main function
-def main():
-    while True:
-        processes = get_process_utilization()
-        display_process_info(processes)
-        time.sleep(1)  # Refresh every second
+        process_list.append(process_info)
+    
+    # Sort the process list by memory_percent
+    sorted_process_list = sorted(process_list, key=lambda x: x['memory_percent'], reverse=True)
+    
+    return json.dumps(sorted_process_list)
 
 if __name__ == "__main__":
-    main()
+    process_list_json = get_process_list_json()
+    print(process_list_json)
